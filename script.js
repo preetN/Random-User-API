@@ -1,6 +1,6 @@
 const apiEP = "https://randomuser.me/api/?results=50";
 let userList = [];
-const fetchUser = async () => {
+const fetchUser = async (url) => {
   try {
     //to fetch data from nyserver, fetch()
     // fetch(apiEP)
@@ -12,14 +12,15 @@ const fetchUser = async () => {
     //   });
 
     //Asyc wait
-    const response = await fetch(apiEP);
+    const response = await fetch(url);
     const data = await response.json();
     userList = data.results;
+    display(userList);
   } catch (error) {
     console.log(error);
   }
 };
-fetchUser();
+fetchUser(apiEP);
 const display = (users) => {
   let str = "";
   users.map((usr, i) => {
@@ -55,17 +56,12 @@ const display = (users) => {
 
   document.getElementById("list").innerHTML = str;
 };
-search_Results = () => {
-  var searchList = [];
-  var i = 0;
-  var gender = document.getElementById("gender").value;
-  userList.map((item) => {
-    if (gender === item.gender) {
-      searchList[i++] = item;
-    }
-  });
-  document.getElementById("user_found").innerText = i;
-  display(searchList);
+search_Results = (e) => {
+  const g = e.value;
+  console.log(g);
+  const url = `${apiEP}&gender=${g}`;
+  fetchUser(url);
+  document.getElementById("user_found").innerText = "0";
 };
 
 document.getElementById("name").addEventListener("keyup", (event) => {
